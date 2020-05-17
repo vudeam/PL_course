@@ -1,31 +1,21 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
-#include <Group.h>
-#include <Menu.h>
-
-#define CLEAN std::cin.clear(); std::cin.ignore(std::cin.rdbuf()->in_avail()); _flushall();
-#define FORi(start, stop) for (int i = start; i < stop; i++)
+#include "Stuff.h"
+#include "Group.h"
+#include "Menu.h"
 
 class Group;
-class Menu;
-enum MENUTYPE { ARROWS, NUMBERS };
-enum STRTYPE {
-	STR_ENG = 0x01, // а также "-"
-	STR_RUS = 0x02, // а также "-"
-	STR_DIGITS = 0x04,
-	STR_PATH = 0x8 // forbidden: <>:"/[forward_slash]|?*
-};
 
 Group* group = nullptr;
 Menu* mainMenu = nullptr;
 
-const char* menuItems[] = {
+std::string menuItems[] = {
 	"0. Выход",
 	"1. Загрузка данных из файла",
 	"2. Распечатка данных о студентах",
 	"3. Редактирование данных о студенте",
-	"4. Удаление студента"
+	"4. Удаление студента",
 	"5. Выгрузка данных в файл",
 	"6. [Вариант 87]"
 };
@@ -71,15 +61,15 @@ int main(void) {
 	*/
 
 	group = new Group();
-	mainMenu = new Menu(menuItems, 7, MENUTYPE::ARROWS); // меню из таких-то пунктов, 6 штук, выбор стрелками
+	mainMenu = new Menu(menuItems, 7, MENUTYPE_ARROWS); // меню из таких-то пунктов, 6 штук, выбор стрелками
 	std::string filename;
 
-	switch (mainMenu.selectItem()) {
+	switch (mainMenu->SelectItem()) {
 	case 0:
 		system("cls");
 		std::cout << "Завершение работы программы";
 		FORi(0, 3) { Sleep(500); std::cout << '.'; }
-		group.Reset();
+		group->Reset();
 		delete mainMenu;
 		delete group;
 		return 0;
@@ -87,25 +77,25 @@ int main(void) {
 
 	case 1:
 		std::cout << "Имя файла с данными о студентах >";
-		filename = GetValidString(STRTYPE::STR_PATH);
-		group.Reset();
-		group.LoadFromFile(); // или group.LoadFromFile(filename.c_str());
+		filename = GetValidString(STR_PATH);
+		group->Reset();
+		group->LoadFromFile(); // или group.LoadFromFile(filename.c_str());
 		break;
 	
 	case 2:
-		group.PrintStudents();
+		group->PrintStudents();
 		break;
 
 	case 3:
-		if (group.Enpty()) {
+		if (group->IsEnpty()) {
 			std::cout << "В группе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
 			system("pause");
 		}
 		else {
 			std::cout << "Номер зачётной книжки студента, данные которого требуется отредактировать >";
-			std::string zach(GetValidString(STRTYPE::STR_RUS | STRTYPE::STR_DIGITS));
-			if (group.StudentExists(zach)) {
-				group.EditStudent(zach);
+			std::string zach(GetValidString(STR_RUS | STR_DIGITS));
+			if (group->StudentExists(zach)) {
+				group->EditStudent(zach);
 			}
 			else {
 				std::cout << "Не найден номер зачётной книжки. Попробуйте снова." << std::endl;
@@ -114,14 +104,14 @@ int main(void) {
 		break;
 
 	case 4:
-		if (group.Empty()) {
+		if (group->IsEmpty()) {
 			std::cout << "В группе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
 		}
 		else {
 			std::cout << "Номер зачётной книжки студента, данные которого требуется отредактировать >";
-			std::string zach(GetValidString(STRTYPE::STR_RUS | STRTYPE::STR_DIGITS));
-			if (group.StudentExists(zach)) {
-				group.RemoveStudent(zach);
+			std::string zach(GetValidString(STR_RUS | STR_DIGITS));
+			if (group->StudentExists(zach)) {
+				group->RemoveStudent(zach);
 			}
 			else {
 				std::cout << "Не найден номер зачётной книжки. Попробуйте снова." << std::endl;
@@ -131,8 +121,8 @@ int main(void) {
 	
 	case 5:
 		std::cout << "Экспортировать данные в файл >";
-		filename = GetValidString(STRTYPE::STR_PATH);
-		group.ExportToFile(filename);
+		filename = GetValidString(STR_PATH);
+		group->ExportToFile(filename);
 		// group.Reset() ??
 		break;
 
