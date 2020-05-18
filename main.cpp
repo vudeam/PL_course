@@ -2,15 +2,14 @@
 #include <Windows.h>
 #include <string>
 #include "Stuff.h"
-#include "Group.h"
+//#include "Group.h"
+#include "ListOfStudents.h"
 #include "Menu.h"
 
-class Group;
-
-Group* group = nullptr;
+ListOfStudents* group = nullptr;
 Menu* mainMenu = nullptr;
 
-std::string menuItems[] = {
+std::string mainMenuItems[] = {
 	"0. Выход",
 	"1. Загрузка данных из файла",
 	"2. Распечатка данных о студентах",
@@ -60,11 +59,11 @@ int main(void) {
 	finout.close();
 	*/
 
-	group = new Group();
-	mainMenu = new Menu(menuItems, 7, MENUTYPE_ARROWS); // меню из таких-то пунктов, 6 штук, выбор стрелками
+	group = new ListOfStudents();
+	mainMenu = new Menu(mainMenuItems, 7, MENUTYPE_ARROWS); // меню из таких-то пунктов, 7 штук, выбор стрелками
 	std::string filename;
 
-	switch (mainMenu->SelectItem()) {
+	switch (mainMenu->SelectItem()) { // метод добивается выбора пункта меню и возвращает его порядковый номер, начиная с 0
 	case 0:
 		system("cls");
 		std::cout << "Завершение работы программы";
@@ -79,15 +78,16 @@ int main(void) {
 		std::cout << "Имя файла с данными о студентах >";
 		filename = GetValidString(STR_PATH);
 		group->Reset();
-		group->LoadFromFile(); // или group.LoadFromFile(filename.c_str());
+		group->LoadFromFile(filename);
 		break;
 	
 	case 2:
-		group->PrintStudents();
+		std::cout << "Сколько студентов распечатать? (0 - все) ";
+		group->PrintStudents(std::stoi(GetValidString(STR_DIGITS)));
 		break;
 
 	case 3:
-		if (group->IsEnpty()) {
+		if (group->IsEmpty()) {
 			std::cout << "В группе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
 			system("pause");
 		}

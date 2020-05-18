@@ -1,4 +1,3 @@
-#pragma once
 #include "Menu.h"
 
 Menu::Menu() {
@@ -15,7 +14,7 @@ Menu::Menu(std::string* _menuItems, int nItems, int _TYPE) {
 	FORi(0, nItems) this->strItemsArr[i] = _menuItems[i];
 }
 Menu::~Menu() {
-	delete this->strItemsArr;
+	delete[] this->strItemsArr;
 }
 int Menu::SelectItem() const {
 	if (this->TYPE == MENUTYPE_ARROWS && this->iItemsCount > 0) {

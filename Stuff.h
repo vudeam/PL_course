@@ -18,9 +18,55 @@ std::string GetValidString(int _strtype = STR_ENG | STR_RUS | STR_DIGITS | STR_P
 			CLEAN
 			std::getline(std::cin, _input);
 			CLEAN
+			if (_input.empty()) continue;
 			if (_input.find_first_not_of("+-0123456789") == std::string::npos) break;
 		} while (87);
-		return _input;
+		//return _input;
+	}
+	if (_strtype == STR_ENG) {
+		do {
+			CLEAN
+			std::getline(std::cin, _input);
+			CLEAN
+			if (_input.empty()) continue;
+			if (_input.find_first_not_of("-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") == std::string::npos) break;
+		} while (87);
+	}
+	if (_strtype == STR_RUS) {
+		do {
+			CLEAN
+			std::getline(std::cin, _input);
+			CLEAN
+			if (_input.empty()) continue;
+			if (_input.find_first_not_of("-àáâãäå¸æçèéêëìíîïğñòóôõö÷øùúûüışÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞß") == std::string::npos) break;
+		} while (87);
+	}
+	if (_strtype ==( STR_ENG | STR_RUS)) {
+		do {
+			CLEAN
+			std::getline(std::cin, _input);
+			CLEAN
+			if (_input.empty()) continue;
+			if (_input.find_first_not_of("-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàáâãäå¸æçèéêëìíîïğñòóôõö÷øùúûüışÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞß") == std::string::npos) break;
+		} while (87);
+	}
+	if (_strtype == (STR_ENG | STR_RUS | STR_DIGITS)) {
+		do {
+			CLEAN
+			std::getline(std::cin, _input);
+			CLEAN
+			if (_input.empty()) continue;
+			if (_input.find_first_not_of("-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàáâãäå¸æçèéêëìíîïğñòóôõö÷øùúûüışÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞß") == std::string::npos) break;
+		} while (87);
+	}
+	if (_strtype == STR_PATH) {
+		do {
+			CLEAN
+			std::getline(std::cin, _input);
+			CLEAN
+			if (_input.empty()) continue;
+			if (_input.find_first_not_of(".-_0123456789()abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") == std::string::npos) break;
+		} while (87);
 	}
 	return _input;
 }
