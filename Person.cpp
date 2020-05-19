@@ -6,8 +6,8 @@ Person::Person(
 	const char* _name,
 	const char* _surn,
 	const char* _patr,
-	Date _dob,
-	char _sex
+	Date        _dob,
+	char        _sex
 ) : dob(_dob), sex(_sex) {
 	strcpy_s(this->name, _name);
 	strcpy_s(this->surn, _surn);

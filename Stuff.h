@@ -3,6 +3,7 @@
 #include <string>
 #define CLEAN std::cin.clear(); std::cin.ignore(std::cin.rdbuf()->in_avail()); _flushall();
 #define FORi(start, stop) for (int i = start; i < stop; i++)
+#define FORj(start, stop) for (int j = start; j < stop; j++)
 #define MENUTYPE_ARROWS 1
 #define MENUTYPE_KEYS 2
 #define STR_ENG 0x01
@@ -29,7 +30,7 @@ std::string GetValidString(int _strtype = STR_ENG | STR_RUS | STR_DIGITS | STR_P
 			std::getline(std::cin, _input);
 			CLEAN
 			if (_input.empty()) continue;
-			if (_input.find_first_not_of("-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") == std::string::npos) break;
+			if (_input.find_first_not_of("-.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") == std::string::npos) break;
 		} while (87);
 	}
 	if (_strtype == STR_RUS) {
@@ -38,7 +39,7 @@ std::string GetValidString(int _strtype = STR_ENG | STR_RUS | STR_DIGITS | STR_P
 			std::getline(std::cin, _input);
 			CLEAN
 			if (_input.empty()) continue;
-			if (_input.find_first_not_of("-àáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß") == std::string::npos) break;
+			if (_input.find_first_not_of("-.àáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß") == std::string::npos) break;
 		} while (87);
 	}
 	if (_strtype ==( STR_ENG | STR_RUS)) {
@@ -47,7 +48,7 @@ std::string GetValidString(int _strtype = STR_ENG | STR_RUS | STR_DIGITS | STR_P
 			std::getline(std::cin, _input);
 			CLEAN
 			if (_input.empty()) continue;
-			if (_input.find_first_not_of("-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß") == std::string::npos) break;
+			if (_input.find_first_not_of("-.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß") == std::string::npos) break;
 		} while (87);
 	}
 	if (_strtype == (STR_ENG | STR_RUS | STR_DIGITS)) {
