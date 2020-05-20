@@ -1,8 +1,8 @@
 #pragma once
-#include "Stuff.h"
-#include <string>
 #include <iostream>
+#include <string>
 #include <conio.h>
+#include "Stuff.h"
 
 class Menu {
 private:

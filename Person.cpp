@@ -1,6 +1,7 @@
-#include "Person.h"
-#include <cstring>
 #include <iostream>
+#include <cstring>
+#include "Person.h"
+
 Person::Person() {};
 Person::Person(
 	const char* _name,

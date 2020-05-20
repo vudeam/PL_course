@@ -139,16 +139,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Date.cpp" />
-    <ClCompile Include="Group.cpp" />
     <ClCompile Include="ListOfStudents.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Person.cpp" />
     <ClCompile Include="Student.cpp" />
+    <ClCompile Include="Stuff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Date.h" />
-    <ClInclude Include="Group.h" />
     <ClInclude Include="ListOfStudents.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Person.h" />

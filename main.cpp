@@ -1,10 +1,9 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
-#include "Stuff.h"
-//#include "Group.h"
-#include "ListOfStudents.h"
 #include "Menu.h"
+#include "ListOfStudents.h"
+#include "Stuff.h"
 
 ListOfStudents* group = nullptr;
 Menu* mainMenu = nullptr;
@@ -75,18 +74,23 @@ int main(void) {
 		break;
 
 	case 1:
+		/*
 		std::cout << "Имя файла с данными о студентах >";
 		filename = GetValidString(STR_PATH);
 		group->Reset();
 		group->LoadFromFile(filename);
 		break;
-	
+		*/
+
 	case 2:
+		/*
 		std::cout << "Сколько студентов распечатать? (0 - все) ";
-		group->PrintStudents(std::stoi(GetValidString(STR_DIGITS)));
+		group->PrintStudents(std::stoi(GetValidString(STR_DIGITS))); // fix number length
 		break;
+		*/
 
 	case 3:
+		/*
 		if (group->IsEmpty()) {
 			std::cout << "В группе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
 			system("pause");
@@ -102,8 +106,10 @@ int main(void) {
 			}
 		}
 		break;
+		*/
 
 	case 4:
+		/*
 		if (group->IsEmpty()) {
 			std::cout << "В группе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
 		}
@@ -118,13 +124,16 @@ int main(void) {
 			}
 		}
 		break;
+		*/
 	
 	case 5:
+		/*
 		std::cout << "Экспортировать данные в файл >";
 		filename = GetValidString(STR_PATH);
 		group->ExportToFile(filename);
 		// group.Reset() ??
 		break;
+		*/
 
 	case 6:
 		/* TODO */

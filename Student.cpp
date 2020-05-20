@@ -1,8 +1,9 @@
-#include "Stuff.h"
-#include "Student.h"
-#include <cstring>
 #include <iostream>
 #include <iomanip>
+#include <cstring>
+#include "Stuff.h"
+#include "Student.h"
+
 Session::Session() : n_subjects(0) {};
 Session::Session(int _n_subjects, Subject* _subjects) : n_subjects(_n_subjects) {
 	FORi(0, _n_subjects) this->subjects[i] = _subjects[i];
@@ -54,4 +55,23 @@ void Student::IntroduceYourself() const {
 				this->sessions[i].subjects[j].mark << std::endl;
 		}
 	}
+}
+std::ostream& operator << (std::ostream& _ostr, const Student& _stud) {
+	_ostr << _stud.surn << ' ' << _stud.name << ' ' << _stud.patr << std::endl;
+	_ostr << "Дата рождения: " << _stud.dob.day << '.' << _stud.dob.month << '.' << _stud.dob.year << std::endl;
+	_ostr << "Пол: " << _stud.sex << std::endl;
+	_ostr << "Год поступления: " << _stud.enroll << std::endl;
+	_ostr << "Факультет: " << _stud.faculty << ", кафедра" << _stud.chair << std::endl;
+	_ostr << "Учебная группа: " << _stud.groupname << std::endl;
+	_ostr << "Зачётная книжка №" << _stud.gradebook << std::endl;
+	_ostr << "Успеваемость: " << std::endl;
+	FORi(0, _stud.n_sessions) {
+		_ostr << "-------------Сессия " << i + 1 << "------------" << std::endl;
+		FORj(0, _stud.sessions[i].n_subjects) {
+			_ostr << j + 1 << ')' << std::left << std::setw(30) << std::setfill('.') <<
+				_stud.sessions[i].subjects[j].title <<
+				_stud.sessions[i].subjects[j].mark << std::endl;
+		}
+	}
+	return _ostr;
 }

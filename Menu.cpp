@@ -25,14 +25,14 @@ int Menu::SelectItem() const {
 				else std::cout << "   " << this->strItemsArr[i] << std::endl;
 			}
 			switch (_getch()) {
-			case 'w':
-			case 72:
+			case KEY_LOWER_W:
+			case KEY_ARROW_UP:
 				cursorPosition -= 1;
 				if (cursorPosition < 0) cursorPosition = 0;
 				system("cls");
 				break;
-			case 's':
-			case 80:
+			case KEY_LOWER_S:
+			case KEY_ARROW_DOWN:
 				cursorPosition += 1;
 				if (cursorPosition > this->iItemsCount - 1) cursorPosition = this->iItemsCount - 1;
 				system("cls");

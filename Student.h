@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 #include "Person.h"
+
 struct Subject {
 	char title[30];
 	int mark;
@@ -24,4 +26,6 @@ public:
 	Student();
 	Student(const char*, const char*, const char*, Date, char, int, const char*, const char*, const char*, const char*, Session*, int);
 	void IntroduceYourself() const;
+	friend std::ostream& operator << (std::ostream&, const Student&);
+	friend class ListOfStudents;
 };
