@@ -134,7 +134,7 @@ Student* InputStudent() {
 		Subject* subjects = new Subject[n_subjects];
 		FORj(0, n_subjects) {
 			std::cout << "[сессия " << i + 1 << "][предмет " << j + 1 << "] название (до 29 символов): ";
-			subjName = GetValidString(STR_RUS);
+			subjName = GetValidString(STR_SUBJ);
 			strcpy_s(subjects[j].title, subjName.substr(0, 29).c_str());
 			std::cout << "[сессия " << i + 1 << "][предмет " << j + 1 << "] оценка (2-5): ";
 			while (87) {
@@ -165,4 +165,8 @@ Student* InputStudent() {
 		n_sessions
 	);
 	return NewStudent;
+}
+int FileExists(std::string& _fname) {
+	std::ifstream fin(_fname.c_str());
+	return fin.good();
 }

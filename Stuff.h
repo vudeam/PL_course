@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "Student.h"
 #define CLEAN std::cin.clear(); std::cin.ignore(std::cin.rdbuf()->in_avail()); _flushall();
@@ -19,3 +20,4 @@
 
 std::string GetValidString(int);
 Student* InputStudent();
+int FileExists(std::string&);

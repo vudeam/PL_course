@@ -1,12 +1,21 @@
-#include <iostream>
-#include <iomanip>
-#include <cstring>
 #include "Stuff.h"
 #include "Student.h"
 
 Session::Session() : n_subjects(0) {};
 Session::Session(int _n_subjects, Subject* _subjects) : n_subjects(_n_subjects) {
 	FORi(0, _n_subjects) this->subjects[i] = _subjects[i];
+}
+int Session::HasSubject(std::string& _title) const {
+	FORi(0, this->n_subjects) {
+		if (!strcmp(this->subjects[i].title, _title.c_str())) return 1;
+	}
+	return 0;
+}
+int Session::HasSubject(const char* _title) const {
+	FORi(0, this->n_subjects) {
+		if (!strcmp(this->subjects[i].title, _title)) return 1;
+	}
+	return 0;
 }
 Student::Student() {};
 Student::Student(
@@ -74,4 +83,25 @@ std::ostream& operator << (std::ostream& _ostr, const Student& _stud) {
 		}
 	}
 	return _ostr;
+}
+double Student::AverageScore() const {
+	double sum = 0, subjcount= 0;
+	FORi(0, this->n_sessions) {
+		subjcount += this->sessions[i].n_subjects;
+		FORj(0, this->sessions[i].n_subjects) {
+			sum += this->sessions[i].subjects[j].mark;
+		}
+	}
+	if (subjcount == 0) return 0;
+	return sum / subjcount;
+}
+double Student::AverageScore(int _ses) const {
+	double sum = 0, subjcount = 0;
+	if ((_ses <= 0) || (this->n_sessions < _ses)) return 0; // if incorrect session is requested
+	subjcount = this->sessions[_ses - 1].n_subjects;
+	FORi(0, subjcount) {
+		sum += this->sessions[_ses - 1].subjects[i].mark;
+	}
+	if (subjcount == 0) return 0;
+	return sum / subjcount;
 }
