@@ -13,6 +13,6 @@ public:
 	Menu();
 	Menu(std::string*, int, int);
 	~Menu();
-	int SelectItem() const;
-	void PrintMenu() const;
+	int SelectItem(int) const; // display menu and select item. int to display number of students in the list
+	// void PrintMenu() const;
 };

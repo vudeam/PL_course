@@ -70,7 +70,7 @@ std::ostream& operator << (std::ostream& _ostr, const Student& _stud) {
 	_ostr << "Дата рождения: " << _stud.dob.day << '.' << _stud.dob.month << '.' << _stud.dob.year << std::endl;
 	_ostr << "Пол: " << _stud.sex << std::endl;
 	_ostr << "Год поступления: " << _stud.enroll << std::endl;
-	_ostr << "Факультет: " << _stud.faculty << ", кафедра" << _stud.chair << std::endl;
+	_ostr << "Факультет: " << _stud.faculty << ", кафедра " << _stud.chair << std::endl;
 	_ostr << "Учебная группа: " << _stud.groupname << std::endl;
 	_ostr << "Зачётная книжка №" << _stud.gradebook << std::endl;
 	_ostr << "Успеваемость: " << std::endl;
@@ -105,3 +105,4 @@ double Student::AverageScore(int _ses) const {
 	if (subjcount == 0) return 0;
 	return sum / subjcount;
 }
+const char* Student::GetGradebook() const { return this->gradebook; }

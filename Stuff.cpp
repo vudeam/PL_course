@@ -67,7 +67,7 @@ std::string GetValidString(int _strtype = STR_ENG | STR_RUS | STR_DIGITS | STR_P
 				std::getline(std::cin, _input);
 			CLEAN
 				if (_input.empty()) continue;
-			if (_input.find_first_not_of("- .àáâãäå¸æçèéêëìíîïğñòóôøö÷øùúûüışÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞß") == std::string::npos) break;
+			if (_input.find_first_not_of("- .àáâãäå¸æçèéêëìíîïğñòóôõö÷øùúûüışÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞß") == std::string::npos) break;
 		} while (87);
 	}
 	return _input;

@@ -16,10 +16,13 @@ Menu::Menu(std::string* _menuItems, int nItems, int _TYPE) {
 Menu::~Menu() {
 	delete[] this->strItemsArr;
 }
-int Menu::SelectItem() const {
+int Menu::SelectItem(int numStudents = -1) const {
 	if (this->TYPE == MENUTYPE_ARROWS && this->iItemsCount > 0) {
 		int cursorPosition = 0, ready = 0;
 		while (!ready) {
+			if (numStudents != -1) {
+				std::cout << "В программу загружено студентов: " << numStudents << std::endl << std::endl;
+			}
 			FORi(0, this->iItemsCount) {
 				if (cursorPosition == i) std::cout << " > " << this->strItemsArr[i] << std::endl;
 				else std::cout << "   " << this->strItemsArr[i] << std::endl;
@@ -49,6 +52,9 @@ int Menu::SelectItem() const {
 		return cursorPosition;
 	}
 	else if (this->TYPE == MENUTYPE_KEYS && this->iItemsCount > 0) {
+		if (numStudents != -1) {
+			std::cout << "В программу загружено студентов: " << numStudents << std::endl << std::endl;
+		}
 		FORi(0, this->iItemsCount) std::cout << this->strItemsArr[i] << std::endl;
 		int selectedItem = 0;
 		selectedItem = std::stoi(GetValidString(STR_DIGITS));
