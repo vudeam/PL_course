@@ -66,6 +66,7 @@ void Student::IntroduceYourself() const {
 	}
 }
 std::ostream& operator << (std::ostream& _ostr, const Student& _stud) {
+	/*
 	_ostr << _stud.surn << ' ' << _stud.name << ' ' << _stud.patr << std::endl;
 	_ostr << "Дата рождения: " << _stud.dob.day << '.' << _stud.dob.month << '.' << _stud.dob.year << std::endl;
 	_ostr << "Пол: " << _stud.sex << std::endl;
@@ -82,6 +83,26 @@ std::ostream& operator << (std::ostream& _ostr, const Student& _stud) {
 				_stud.sessions[i].subjects[j].mark << std::endl;
 		}
 	}
+	*/
+	_ostr << std::left << std::setw(10) << _stud.gradebook;
+	_ostr << '|' << std::left << std::setw(30) << _stud.surn <<
+		'|' << std::left << std::setw(30) << _stud.name <<
+		'|' << std::left << std::setw(30) << _stud.patr << '|';
+	_ostr << ' ' << _stud.sex << ' ' << '|' <<
+		std::right << std::setfill('0') << std::setw(2) << _stud.dob.day << '.' <<
+		std::setfill('0') << std::setw(2) << _stud.dob.month << '.' <<
+		_stud.dob.year << '|' << std::setfill(' ');
+	_ostr <<_stud.enroll << '|';
+	_ostr << std::left << std::setw(10) << _stud.faculty << '|';
+	_ostr << std::left << std::setw(10) << _stud.chair << '|';
+	_ostr << std::left << std::setw(15) << _stud.groupname << '|';
+	//std::cout << std::left << std::setw(10) << (*this)[i].gradebook << '|';
+	FORj(0, 9) {
+		if (_stud.AverageScore(j + 1) > 0) _ostr << std::fixed << std::setprecision(1) << (double)_stud.AverageScore(j + 1);
+		else _ostr << " * ";
+		_ostr << ' ';
+	}
+	_ostr << '|';
 	return _ostr;
 }
 double Student::AverageScore() const {

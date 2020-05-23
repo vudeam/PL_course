@@ -110,7 +110,10 @@ int ListOfStudents::RemoveStudent(std::string& _gradebook) {
 //	throw "Student not found"; // !!!
 //}
 int ListOfStudents::LoadFromFile(std::string& _filename) {
-	if (!FileExists(_filename)) return 0;
+	if (!FileExists(_filename)) {
+		std::cout << "Файл " << _filename << " не найден." << std::endl;
+		return 0;
+	}
 	this->Reset();
 	std::ifstream fin(_filename.c_str(), std::ios::in | std::ios::binary);
 	if (!fin) { std::cout << "Возникла непредвиденная ошибка при открытии файла. Считывание прервано."; return -1; }
@@ -213,7 +216,6 @@ void ListOfStudents::EditStudent(std::string& _zach) {
 		switch (editMenu->SelectItem(-1)) { // display items and don't show number of students
 		case 0:
 			delete editMenu;
-			system("cls");
 			return;
 			break;
 

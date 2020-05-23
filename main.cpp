@@ -23,10 +23,13 @@ int main(void) {
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
+	double maxAverage = 0, minAverage = 0;
+	int* SessionsToSelect;
+	int iSession = -1;
 	ListOfStudents Group;
 	mainMenu = new Menu(mainMenuItems, 8, MENUTYPE_ARROWS); // меню из таких-то пунктов, 7 штук, выбор стрелками
 	Student* buf = nullptr;
-	std::string filename = "";
+	std::string filename = "", sessionsSelect = "";
 
 	while (87) {
 		// std::cout << "В программу загружено студентов: " << Group->Length() << std::endl << std::endl;
@@ -76,7 +79,8 @@ int main(void) {
 			}
 			else {
 				Group.Append(*buf);
-				std::cout << "[ВВОД ЗАВЕРШЁН]" << std::endl << "ДОБАВЛЕННЫЙ СТУДЕНТ: " << Group[Group.Length() - 1];
+				std::cout << "[ВВОД ЗАВЕРШЁН]" << std::endl << "ДОБАВЛЕННЫЙ СТУДЕНТ: " << std::endl;
+				Group[Group.Length() - 1].IntroduceYourself();
 			}
 			CLEAN
 			std::cout << "[Enter]";
@@ -145,8 +149,82 @@ int main(void) {
 			break;
 
 		case 7:
-			/* TODO */
-			// ЖОПА
+			if (Group.IsEmpty()) {
+				std::cout << "В программе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
+				CLEAN
+				std::cout << "[Enter]";
+				std::cin.get();
+				CLEAN
+				system("cls");
+				break;
+			}
+			sessionsSelect = "";
+			while (87) {
+				std::cout << "За какие сессии (1-9) делать выборку (0 - закончить выбор) [" << sessionsSelect << "] : ";
+				iSession = stoi(GetValidString(STR_DIGITS).substr(0, 2));
+				if (iSession == 0) break;
+				if ((iSession < 0) || (iSession > 9)) std::cout << "Неверный номер сессии. Попробуйте снова" << std::endl;
+				else {
+					sessionsSelect += ' ' + std::to_string(iSession) + ' ';
+				}
+			}
+			if (sessionsSelect.empty()) {
+				CLEAN
+				std::cout << "[Enter]";
+				std::cin.get();
+				CLEAN
+				system("cls");
+				break;
+			}
+			iSession = 0;
+			FORi(0, sessionsSelect.length()) {
+				if (((sessionsSelect[i] - '0') > 0) && ((sessionsSelect[i] - '0') < 10)) iSession += 1;
+			}
+			SessionsToSelect = new int[iSession];
+			iSession = 0;
+			FORi(0, sessionsSelect.length()) {
+				if (((sessionsSelect[i] - '0') > 0) && ((sessionsSelect[i] - '0') < 10)) {
+					SessionsToSelect[iSession] = sessionsSelect[i] - '0';
+					iSession += 1;
+				}
+			}
+			FORj(0, iSession) { // iterate through each session number in 
+				maxAverage = minAverage = Group[0].AverageScore(SessionsToSelect[j]); // set max & min to first average
+				FORi(1, Group.Length()) {
+					if (maxAverage < Group[i].AverageScore(SessionsToSelect[j])) maxAverage = Group[i].AverageScore(SessionsToSelect[j]);
+					if (minAverage > Group[i].AverageScore(SessionsToSelect[j])) minAverage = Group[i].AverageScore(SessionsToSelect[j]);
+				}
+				std::cout << "Найденный минимальный средний балл за " << SessionsToSelect[j] << " сессию: " << minAverage << std::endl;
+				std::cout << "Найденный максимальный средний балл за " << SessionsToSelect[j] << " сессию: " << maxAverage << std::endl;
+				std::cout << std::endl << "НАИБОЛЕЕ УСПЕВАЮЩИЕ ЗА " << SessionsToSelect[j] << " СЕССИЮ:" << std::endl;
+				std::cout << "+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+" << std::endl;
+				FORi(0, Group.Length()) {
+					if (maxAverage == Group[i].AverageScore(SessionsToSelect[j])) {
+						std::cout << '|' << std::right << std::setfill('0') << std::setw(3) <<
+							i + 1 << '|' << std::setfill(' ') <<
+							Group[i] << std::endl;
+						std::cout << "+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+" << std::endl;
+					}
+				}
+				std::cout << std::endl;
+				std::cout << std::endl << "НАИМЕНЕЕ УСПЕВАЮЩИЕ ЗА " << SessionsToSelect[j] << " СЕССИЮ:" << std::endl;
+				std::cout << "+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+" << std::endl;
+				FORi(0, Group.Length()) {
+					if (minAverage == Group[i].AverageScore(SessionsToSelect[j])) {
+						std::cout << '|' << std::right << std::setfill('0') << std::setw(3) <<
+							i + 1 << '|' << std::setfill(' ') <<
+							Group[i] << std::endl;
+						std::cout << "+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+" << std::endl;
+					}
+				}
+			}
+			delete[] SessionsToSelect;
+			CLEAN
+			std::cout << "[Enter]";
+			std::cin.get();
+			CLEAN
+			system("cls");
+			break;
 
 		default:
 			std::cout << "Как вы вообще сюда попали?\nНеверный пункт меню. Попробуйте снова." << std::endl;
