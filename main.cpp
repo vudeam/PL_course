@@ -25,7 +25,7 @@ int main(void) {
 
 	double maxAverage = 0, minAverage = 0;
 	int* SessionsToSelect;
-	int iSession = -1;
+	int iSession = -1, lowerYear = 0, upperYear = 0;
 	ListOfStudents Group;
 	mainMenu = new Menu(mainMenuItems, 8, MENUTYPE_ARROWS); // меню из таких-то пунктов, 7 штук, выбор стрелками
 	Student* buf = nullptr;
@@ -159,6 +159,8 @@ int main(void) {
 				break;
 			}
 			sessionsSelect = "";
+			maxAverage = minAverage = 0;
+			lowerYear = upperYear = 0;
 			while (87) {
 				std::cout << "За какие сессии (1-9) делать выборку (0 - закончить выбор) [" << sessionsSelect << "] : ";
 				iSession = stoi(GetValidString(STR_DIGITS).substr(0, 2));
@@ -167,6 +169,18 @@ int main(void) {
 				else {
 					sessionsSelect += ' ' + std::to_string(iSession) + ' ';
 				}
+			}
+			while (87) {
+				std::cout << "Минимальный год рождения: ";
+				lowerYear = stoi(GetValidString(STR_DIGITS).substr(0, 5));
+				if (lowerYear >= 1980) break;
+				else std::cout << "Неверный год. Проверьте возрастные границы." << std::endl;
+			}
+			while (87) {
+				std::cout << "Максимальный год рождения: ";
+				upperYear = stoi(GetValidString(STR_DIGITS).substr(0, 5));
+				if ((upperYear < lowerYear) || (upperYear > 2020)) std::cout << "Неверный год. Он не должен быть ниже нижней границы или больше 2020 года" << std::endl;
+				else break;
 			}
 			if (sessionsSelect.empty()) {
 				CLEAN
@@ -189,16 +203,28 @@ int main(void) {
 				}
 			}
 			FORj(0, iSession) { // iterate through each session number in 
-				maxAverage = minAverage = Group[0].AverageScore(SessionsToSelect[j]); // set max & min to first average
-				FORi(1, Group.Length()) {
-					if (maxAverage < Group[i].AverageScore(SessionsToSelect[j])) maxAverage = Group[i].AverageScore(SessionsToSelect[j]);
-					if (minAverage > Group[i].AverageScore(SessionsToSelect[j])) minAverage = Group[i].AverageScore(SessionsToSelect[j]);
+				//maxAverage = minAverage = Group[0].AverageScore(SessionsToSelect[j]); // set max & min to first average
+				FORi(0, Group.Length()) { // find first non-zero average score
+					if ((Group[i].GetDOBYear() <= upperYear) && (Group[i].GetDOBYear() >= lowerYear)) // find student within bounds
+					if ((Group[i].AverageScore(SessionsToSelect[j]) > 0)) {
+						maxAverage = minAverage = Group[i].AverageScore(SessionsToSelect[j]);
+						break;
+					}
 				}
-				std::cout << "Найденный минимальный средний балл за " << SessionsToSelect[j] << " сессию: " << minAverage << std::endl;
+				FORi(0, Group.Length()) {
+					if ((Group[i].GetDOBYear() <= upperYear) && (Group[i].GetDOBYear() >= lowerYear)) {
+						if ((maxAverage < Group[i].AverageScore(SessionsToSelect[j])) && (Group[i].AverageScore(SessionsToSelect[j]) > 0))
+							maxAverage = Group[i].AverageScore(SessionsToSelect[j]);
+						if ((minAverage > Group[i].AverageScore(SessionsToSelect[j]) && (Group[i].AverageScore(SessionsToSelect[j]) > 0)))
+							minAverage = Group[i].AverageScore(SessionsToSelect[j]);
+					}
+				}
+				std::cout << std::endl << "Найденный минимальный средний балл за " << SessionsToSelect[j] << " сессию: " << minAverage << std::endl;
 				std::cout << "Найденный максимальный средний балл за " << SessionsToSelect[j] << " сессию: " << maxAverage << std::endl;
 				std::cout << std::endl << "НАИБОЛЕЕ УСПЕВАЮЩИЕ ЗА " << SessionsToSelect[j] << " СЕССИЮ:" << std::endl;
 				std::cout << "+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+" << std::endl;
 				FORi(0, Group.Length()) {
+					if ((Group[i].GetDOBYear() <= upperYear) && (Group[i].GetDOBYear() >= lowerYear))
 					if (maxAverage == Group[i].AverageScore(SessionsToSelect[j])) {
 						std::cout << '|' << std::right << std::setfill('0') << std::setw(3) <<
 							i + 1 << '|' << std::setfill(' ') <<
@@ -210,6 +236,7 @@ int main(void) {
 				std::cout << std::endl << "НАИМЕНЕЕ УСПЕВАЮЩИЕ ЗА " << SessionsToSelect[j] << " СЕССИЮ:" << std::endl;
 				std::cout << "+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+" << std::endl;
 				FORi(0, Group.Length()) {
+					if ((Group[i].GetDOBYear() <= upperYear) && (Group[i].GetDOBYear() >= lowerYear))
 					if (minAverage == Group[i].AverageScore(SessionsToSelect[j])) {
 						std::cout << '|' << std::right << std::setfill('0') << std::setw(3) <<
 							i + 1 << '|' << std::setfill(' ') <<
@@ -217,12 +244,12 @@ int main(void) {
 						std::cout << "+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+" << std::endl;
 					}
 				}
+				CLEAN
+				std::cout << "[Enter]";
+				std::cin.get();
+				CLEAN
 			}
 			delete[] SessionsToSelect;
-			CLEAN
-			std::cout << "[Enter]";
-			std::cin.get();
-			CLEAN
 			system("cls");
 			break;
 

@@ -34,6 +34,7 @@ public:
 	double AverageScore() const;     // calculate student's average score for all sessions
 	double AverageScore(int) const;  // calculate student's average score for a given session (1-9)
 	const char* GetGradebook() const;
+	int GetDOBYear() const;
 	friend std::ostream& operator << (std::ostream&, const Student&); // print student as a part of a table
 	friend class ListOfStudents;
 };

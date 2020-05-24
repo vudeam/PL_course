@@ -127,3 +127,4 @@ double Student::AverageScore(int _ses) const {
 	return sum / subjcount;
 }
 const char* Student::GetGradebook() const { return this->gradebook; }
+int Student::GetDOBYear() const { return this->dob.year; }
