@@ -57,7 +57,7 @@ int Menu::SelectItem(int numStudents = -1) const {
 		}
 		FORi(0, this->iItemsCount) std::cout << this->strItemsArr[i] << std::endl;
 		int selectedItem = 0;
-		selectedItem = std::stoi(GetValidString(STR_DIGITS));
+		selectedItem = std::stoi(GetValidString(STR_DIGITS).substr(0, 3));
 		return selectedItem;
 	}
 	else {

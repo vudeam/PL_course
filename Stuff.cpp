@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-#include "Student.h"
 #include "Stuff.h"
 
 std::string GetValidString(int _strtype = STR_ENG | STR_RUS | STR_DIGITS | STR_PATH | STR_SUBJ) {
@@ -72,6 +69,7 @@ std::string GetValidString(int _strtype = STR_ENG | STR_RUS | STR_DIGITS | STR_P
 	}
 	return _input;
 }
+
 Student* InputStudent() {
 	std::string name = "", surn = "", patr = "", faculty = "", chair = "", groupname = "", gradebook = "", subjName = "";
 	int day = 0, month = 0, year = 0, enroll = 0, n_sessions = 0, n_subjects = 0, subjMark = 0;
@@ -166,7 +164,192 @@ Student* InputStudent() {
 	);
 	return NewStudent;
 }
+
 int FileExists(std::string& _fname) {
 	std::ifstream fin(_fname.c_str());
 	return fin.good();
+}
+
+int CryptExportToFile(ListOfStudents& _list, std::string& _filename) {
+	if (_list.IsEmpty()) return 0;
+	std::ofstream fout((_filename + ".enc").c_str(), std::ios::out | std::ios::binary);
+	if (!fout) { std::cout << "Возникла непредвиденная ошибка при открытии файла. Запись прервана."; return -1; }
+	int iStudentsExported = 0;
+	Student toExport;
+	HCRYPTPROV hProvider;
+	HCRYPTKEY hSessionKey;
+	HCRYPTHASH hHash;
+	DWORD dwDataLen, dwPasswordLen;
+	CHAR szPassword[PASSWORD_LEN] = "";
+	dwDataLen = sizeof(Student);
+	if (!CryptAcquireContext(
+		&hProvider,
+		NULL,
+		NULL,
+		PROV_RSA_FULL,
+		0
+	)) {
+		std::cout << "Ошибка во время получения контекста криптопровайдера!" << std::endl;
+		return -1;
+	}
+	std::cout << "Пароль для шифрования файла: ";
+	strcpy_s(szPassword, GetValidString(STR_ENG | STR_RUS | STR_DIGITS).substr(0, PASSWORD_LEN - 1).c_str());
+	dwPasswordLen = strlen(szPassword);
+	if (!CryptCreateHash(
+		hProvider,
+		CALG_MD5,
+		0,
+		0,
+		&hHash
+	)) {
+		std::cout << "Ошибка во время генерации хеша пароля!" << std::endl;
+		return -1;
+	}
+	if (!CryptHashData(
+		hHash,
+		(BYTE*)szPassword,
+		dwPasswordLen,
+		0
+	)) {
+		std::cout << "Ошибка во время хеширования пароля!" << std::endl;
+		return -1;
+	}
+	if (!CryptDeriveKey(
+		hProvider,
+		CALG_RC4,
+		hHash,
+		CRYPT_EXPORTABLE,
+		&hSessionKey
+	)) {
+		std::cout << "Ошибка во время получения ключа на основе пароля!" << std::endl;
+		return -1;
+	}
+	FORi(0, _list.Length()) {
+		toExport = _list[i];
+		if (!CryptEncrypt(
+			hSessionKey,
+			NULL,
+			TRUE,
+			0,
+			(BYTE*)&toExport,
+			&dwDataLen,
+			dwDataLen
+		)) {
+			std::cout << "Ошибка во время шифрования студента " << i << std::endl;
+			return -1;
+		}
+		fout.write((char*)&toExport, sizeof(Student));
+		iStudentsExported += 1;
+	}
+	if (hHash)
+		if (!(CryptDestroyHash(hHash))) {
+			std::cout << "Ошибка во время уничтожения хеша!" << std::endl;
+			return -1;
+		}
+	if (hSessionKey)
+		if (!(CryptDestroyKey(hSessionKey))) {
+			std::cout << "Ошибка во время уничтожения ключа!" << std::endl;
+			return -1;
+		}
+	if (hProvider)
+		if (!(CryptReleaseContext(hProvider, 0))) {
+			std::cout << "Ошибка во время освобождения контекста криптопровайдера!" << std::endl;
+			return -1;
+		}
+	fout.close();
+	return iStudentsExported;
+}
+
+int CryptLoadFromFile(ListOfStudents& _list, std::string& _filename) {
+	if (!FileExists(_filename)) {
+		std::cout << "Файл " << _filename << " не найден." << std::endl;
+		return 0;
+	}
+	std::ifstream fin(_filename.c_str(), std::ios::in | std::ios::binary);
+	if (!fin) { std::cout << "Возникла непредвиденная ошибка при открытии файла. Считывание прервано."; return -1; }
+	_list.Reset();
+	int iStudentsImported = 0;
+	Student fromFile;
+	HCRYPTPROV hProvider;
+	HCRYPTKEY hSessionKey;
+	HCRYPTHASH hHash;
+	DWORD dwDataLen, dwPasswordLen;
+	CHAR szPassword[PASSWORD_LEN] = "";
+	dwDataLen = sizeof(Student);
+	if (!CryptAcquireContext(
+		&hProvider,
+		NULL,
+		NULL,
+		PROV_RSA_FULL,
+		0
+	)) {
+		std::cout << "Ошибка во время получения контекста криптопровайдера!" << std::endl;
+		return -1;
+	}
+	std::cout << "Пароль для расшифровки файла: ";
+	strcpy_s(szPassword, GetValidString(STR_ENG | STR_RUS | STR_DIGITS).substr(0, PASSWORD_LEN - 1).c_str());
+	dwPasswordLen = strlen(szPassword);
+	if (!CryptCreateHash(
+		hProvider,
+		CALG_MD5,
+		0,
+		0,
+		&hHash
+	)) {
+		std::cout << "Ошибка во время генерации хеша пароля!" << std::endl;
+		return -1;
+	}
+	if (!CryptHashData(
+		hHash,
+		(BYTE*)szPassword,
+		dwPasswordLen,
+		0
+	)) {
+		std::cout << "Ошибка во время хеширования пароля!" << std::endl;
+		return -1;
+	}
+	if (!CryptDeriveKey(
+		hProvider,
+		CALG_RC4,
+		hHash,
+		CRYPT_EXPORTABLE,
+		&hSessionKey
+	)) {
+		std::cout << "Ошибка во время получения ключа на основе пароля!" << std::endl;
+		return -1;
+	}
+	while (fin.read((char*)&fromFile, sizeof(Student))) {
+		if (!CryptDecrypt(
+			hSessionKey,
+			NULL,
+			TRUE,
+			0,
+			(BYTE*)&fromFile,
+			&dwDataLen
+		)) {
+			std::cout << "Ошибка во время расшифровки студента " << std::endl;
+			return -1;
+		}
+		if (!_list.StudentExists(fromFile)) {
+			_list.Append(fromFile);
+			iStudentsImported += 1;
+		}
+	}
+	if (hHash)
+		if (!(CryptDestroyHash(hHash))) {
+			std::cout << "Ошибка во время уничтожения хеша!" << std::endl;
+			return -1;
+		}
+	if (hSessionKey)
+		if (!(CryptDestroyKey(hSessionKey))) {
+			std::cout << "Ошибка во время уничтожения ключа!" << std::endl;
+			return -1;
+		}
+	if (hProvider)
+		if (!(CryptReleaseContext(hProvider, 0))) {
+			std::cout << "Ошибка во время освобождения контекста криптопровайдера!" << std::endl;
+			return -1;
+		}
+	fin.close();
+	return iStudentsImported;
 }

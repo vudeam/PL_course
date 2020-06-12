@@ -1,7 +1,7 @@
 #include "Stuff.h"
 #include "Student.h"
 
-Session::Session() : n_subjects(0) {};
+Session::Session() : n_subjects(0), subjects() {};
 Session::Session(int _n_subjects, Subject* _subjects) : n_subjects(_n_subjects) {
 	FORi(0, _n_subjects) this->subjects[i] = _subjects[i];
 }
@@ -61,7 +61,7 @@ void Student::IntroduceYourself() const {
 		FORj(0, this->sessions[i].n_subjects) {
 			std::cout << j+1 << ')' << std::left << std::setw(30) << std::setfill('.') <<
 				this->sessions[i].subjects[j].title << 
-				this->sessions[i].subjects[j].mark << std::endl;
+				this->sessions[i].subjects[j].mark << std::setfill(' ') << std::endl;
 		}
 	}
 }
@@ -118,7 +118,7 @@ double Student::AverageScore() const {
 }
 double Student::AverageScore(int _ses) const {
 	double sum = 0, subjcount = 0;
-	if ((_ses <= 0) || (this->n_sessions < _ses)) return 0; // if incorrect session is requested
+	if ((_ses <= 0) || (this->n_sessions < _ses)) return 0;
 	subjcount = this->sessions[_ses - 1].n_subjects;
 	FORi(0, subjcount) {
 		sum += this->sessions[_ses - 1].subjects[i].mark;

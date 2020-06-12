@@ -1,11 +1,11 @@
 #include <iostream>
 #include <Windows.h>
+#include <wincrypt.h>
 #include <string>
 #include "Menu.h"
 #include "ListOfStudents.h"
 #include "Stuff.h"
 
-ListOfStudents* Group = nullptr;
 Menu* mainMenu = nullptr;
 
 std::string mainMenuItems[] = {
@@ -16,7 +16,8 @@ std::string mainMenuItems[] = {
 	"4. Редактирование данных о студенте",
 	"5. Удаление студента",
 	"6. Синхронизировать с файлом",
-	"7. [Вариант 87]"
+	"7. [Вариант 87]",
+	"8. Загрузка данных из зашифрованного файла"
 };
 
 int main(void) {
@@ -27,13 +28,12 @@ int main(void) {
 	int* SessionsToSelect;
 	int iSession = -1, lowerYear = 0, upperYear = 0;
 	ListOfStudents Group;
-	mainMenu = new Menu(mainMenuItems, 8, MENUTYPE_ARROWS); // меню из таких-то пунктов, 7 штук, выбор стрелками
+	mainMenu = new Menu(mainMenuItems, 9, MENUTYPE_ARROWS);
 	Student* buf = nullptr;
 	std::string filename = "", sessionsSelect = "";
 
 	while (87) {
-		// std::cout << "В программу загружено студентов: " << Group->Length() << std::endl << std::endl;
-		switch (mainMenu->SelectItem(Group.Length())) { // метод добивается выбора пункта меню и возвращает его порядковый номер, начиная с 0
+		switch (mainMenu->SelectItem(Group.Length())) {
 		case 0:
 			system("cls");
 			std::cout << "Завершение работы программы";
@@ -43,7 +43,7 @@ int main(void) {
 			return 0;
 			break;
 
-		case 1: // load list from the file
+		case 1:
 			std::cout << "Имя файла с данными о студентах >";
 			filename = GetValidString(STR_PATH);
 			std::cout << "Загружено студентов из файла: " << Group.LoadFromFile(filename) << std::endl;
@@ -54,13 +54,13 @@ int main(void) {
 			system("cls");
 			break;
 
-		case 2: // print students table
+		case 2:
 			if (Group.IsEmpty()) std::cout << "Отсутствуют данные о студентах. Добавьте их или загрузите из файла." << std::endl;
 			else {
 				system("cls");
 				std::cout << "Предупреждение: большое количество студентов может замедлить работу программы." << std::endl;
 				std::cout << "Сколько студентов распечатать? (0 - все): ";
-				Group.PrintStudents(std::stoi(GetValidString(STR_DIGITS).substr(0, 5))); // fix number length
+				Group.PrintStudents(std::stoi(GetValidString(STR_DIGITS).substr(0, 5)));
 			}
 			CLEAN
 			std::cout << "[Enter]";
@@ -69,7 +69,7 @@ int main(void) {
 			system("cls");
 			break;
 
-		case 3: // append new student
+		case 3:
 			if (Group.IsEmpty()) std::cout << "Добавьте информацию о первом студенте.";
 			std::cout << std::endl;
 			buf = InputStudent();
@@ -89,10 +89,10 @@ int main(void) {
 			system("cls");
 			break;
 
-		case 4: // edit student
+		case 4:
 			if (Group.IsEmpty()) {
 				std::cout << "В программе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
-				system("pause");
+				// system("pause");
 			}
 			else {
 				std::cout << "Номер зачётной книжки студента, данные которого требуется отредактировать >";
@@ -111,7 +111,7 @@ int main(void) {
 			system("cls");
 			break;
 
-		case 5: // remove student
+		case 5:
 			if (Group.IsEmpty()) {
 				std::cout << "В программе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
 			}
@@ -132,7 +132,7 @@ int main(void) {
 			system("cls");
 			break;
 
-		case 6: // sync with the file
+		case 6:
 			if (Group.IsEmpty()) {
 				std::cout << "В программе отсутствуют студенты. Сначало нужно их добавить." << std::endl;
 			}
@@ -140,6 +140,7 @@ int main(void) {
 				std::cout << "Экспортировать данные в файл >";
 				filename = GetValidString(STR_PATH);
 				std::cout << "В файл записано студентов: " << Group.ExportToFile(filename) << std::endl;
+				std::cout << "В зашифрованный файл " << filename + ".enc" << " записано студентов: " << CryptExportToFile(Group, filename) << std::endl;
 			}
 			CLEAN
 			std::cout << "[Enter]";
@@ -202,10 +203,10 @@ int main(void) {
 					iSession += 1;
 				}
 			}
-			FORj(0, iSession) { // iterate through each session number in 
-				//maxAverage = minAverage = Group[0].AverageScore(SessionsToSelect[j]); // set max & min to first average
-				FORi(0, Group.Length()) { // find first non-zero average score
-					if ((Group[i].GetDOBYear() <= upperYear) && (Group[i].GetDOBYear() >= lowerYear)) // find student within bounds
+			FORj(0, iSession) {
+				//maxAverage = minAverage = Group[0].AverageScore(SessionsToSelect[j]);
+				FORi(0, Group.Length()) {
+					if ((Group[i].GetDOBYear() <= upperYear) && (Group[i].GetDOBYear() >= lowerYear))
 					if ((Group[i].AverageScore(SessionsToSelect[j]) > 0)) {
 						maxAverage = minAverage = Group[i].AverageScore(SessionsToSelect[j]);
 						break;
@@ -250,6 +251,17 @@ int main(void) {
 				CLEAN
 			}
 			delete[] SessionsToSelect;
+			system("cls");
+			break;
+
+		case 8:
+			std::cout << "Имя зашифрованного файла с данными о студентах >";
+			filename = GetValidString(STR_PATH);
+			std::cout << "Загружено студентов из файла: " << CryptLoadFromFile(Group, filename) << std::endl;
+			CLEAN
+			std::cout << "[Enter]";
+			std::cin.get();
+			CLEAN
 			system("cls");
 			break;
 

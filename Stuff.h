@@ -2,7 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <Windows.h>
+#include <wincrypt.h>
 #include "Student.h"
+#include "ListOfStudents.h"
 #define CLEAN std::cin.clear(); std::cin.ignore(std::cin.rdbuf()->in_avail()); _flushall();
 #define FORi(start, stop) for (int i = start; i < stop; i++)
 #define FORj(start, stop) for (int j = start; j < stop; j++)
@@ -17,7 +20,10 @@
 #define KEY_LOWER_S     's'
 #define KEY_ARROW_UP    72
 #define KEY_ARROW_DOWN  80
+#define PASSWORD_LEN    64
 
 std::string GetValidString(int);
-Student* InputStudent();
-int FileExists(std::string&);
+Student*    InputStudent();
+int         FileExists(std::string&);
+int         CryptExportToFile(ListOfStudents&, std::string&);
+int         CryptLoadFromFile(ListOfStudents&, std::string&);

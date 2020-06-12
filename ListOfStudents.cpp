@@ -23,12 +23,12 @@ Student& ListOfStudents::operator [] (const int _i) const {
 }
 int ListOfStudents::Length() const { return this->iStudentsCount; }
 int ListOfStudents::Append(Student stud) {
-	if (this->StudentExists(stud.gradebook)) return 0; // if student exists - skip addition
+	if (this->StudentExists(stud.gradebook)) return 0;
 	StudentNode* node = (StudentNode*) new StudentNode;
 	node->data = stud;
 	node->nextNode = nullptr;
 	node->prevNode = nullptr;
-	if (this->pBeg) { // if not first of the list
+	if (this->pBeg) {
 		node->prevNode = this->pEnd;
 		this->pEnd->nextNode = node;
 		this->pEnd = node;
@@ -69,7 +69,7 @@ StudentNode* ListOfStudents::Find(const char* _gradebook) const {
 	return nullptr;
 }
 int ListOfStudents::StudentExists(std::string& _gradebook) const { return this->Find(_gradebook) ? 1 : 0; }
-int ListOfStudents::StudentExists(const char* _gradebook) const { return this->Find(_gradebook) ? 1 : 0; }
+int ListOfStudents::StudentExists(const char* _gradebook)  const { return this->Find(_gradebook) ? 1 : 0; }
 int ListOfStudents::StudentExists(const Student _candidate) const {
 	StudentNode* node = this->pBeg;
 	while (node) {
@@ -80,14 +80,14 @@ int ListOfStudents::StudentExists(const Student _candidate) const {
 }
 int ListOfStudents::RemoveStudent(std::string& _gradebook) {
 	if (StudentNode* toRemove = this->Find(_gradebook)) {
-		if ((toRemove == this->pBeg) && (toRemove == this->pEnd)) { // last and only element
+		if ((toRemove == this->pBeg) && (toRemove == this->pEnd)) {
 			this->pBeg = this->pEnd = nullptr;
 		}
-		else if (toRemove == this->pBeg) {          // head
+		else if (toRemove == this->pBeg) {
 			this->pBeg = this->pBeg->nextNode;
 			this->pBeg->prevNode = nullptr;
 		}
-		else if (toRemove == this->pEnd) {     // tail
+		else if (toRemove == this->pEnd) {
 			this->pEnd = this->pEnd->prevNode;
 			this->pEnd->nextNode = nullptr;
 		}
@@ -202,7 +202,7 @@ void ListOfStudents::EditStudent(std::string& _zach) {
 	std::string name = "", surn = "", patr = "", faculty = "", chair = "", groupname = "", gradebook = _zach, gradebook_new = "", subjName = "";
 	int day = 0, month = 0, year = 0, enroll = 0, n_sessions = 0, n_subjects = 0, subjMark = 0;
 	char sex = 'М';
-	Student* NewStudent = nullptr;
+	//Student* NewStudent = nullptr;
 	Date* dob = nullptr;
 	Session* Sessions = nullptr;
 	Subject* subjects = nullptr;
@@ -213,7 +213,7 @@ void ListOfStudents::EditStudent(std::string& _zach) {
 		std::cout << "СТУДЕНТ:" << std::endl;
 		this->Find(gradebook)->data.IntroduceYourself();
 		std::cout << std::endl << "Какие сведения требуется отредактировать?" << std::endl;
-		switch (editMenu->SelectItem(-1)) { // display items and don't show number of students
+		switch (editMenu->SelectItem(-1)) {
 		case 0:
 			delete editMenu;
 			return;
