@@ -4,5 +4,6 @@
 add_executable(PL_course
     main.cpp
     stuff.cpp
+    Menu.cpp
 )
 
