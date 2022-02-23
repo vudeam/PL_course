@@ -14,7 +14,7 @@ public:
     ~Menu ();
 
     int
-    SelectItem (int num = -1);
+    SelectItem (int num = -1) const;
 
 
 private:
