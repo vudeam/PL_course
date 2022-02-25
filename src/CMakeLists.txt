@@ -6,5 +6,6 @@ add_executable(PL_course
     stuff.cpp
     Menu.cpp
     Date.cpp
+    Person.cpp
 )
 

@@ -15,8 +15,6 @@ public:
     bool
     Validate ();
 
-private:
-
     int day;
     int month;
     int year;
