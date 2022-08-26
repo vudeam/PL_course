@@ -12,7 +12,11 @@ class Person
 public:
 
     Person () = default;
-    Person (std::string name, std::string surn, std::string patr, Date dob, unsigned char sex);
+    Person (const std::string & name,
+            const std::string & surn,
+            const std::string & patr,
+            Date dob,
+            unsigned char sex);
 
     virtual void
     IntroduceYourself () const;

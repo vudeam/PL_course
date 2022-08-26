@@ -3,9 +3,9 @@
 #include <iostream>
 
 
-Person::Person (std::string name,
-                std::string surn,
-                std::string patr,
+Person::Person (const std::string & name,
+                const std::string & surn,
+                const std::string & patr,
                 Date dob,
                 unsigned char sex)
     : name{name}

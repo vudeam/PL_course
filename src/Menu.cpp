@@ -1,7 +1,6 @@
 #include "../include/Menu.hpp"
 #include "../include/stuff.hpp"
 
-#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 
@@ -97,11 +96,11 @@ Menu::Menu ()
 }
 
 Menu::Menu (std::string * menuItems, int nItems, int menuType)
-    : type{menuType}
-    , nItems{nItems}
+    : nItems{nItems}
+    , type{menuType}
     , arrItems{new std::string[nItems]}
 {
-    for (std::size_t i = 0; i < nItems; i++) arrItems[i] = menuItems[i];
+    for (int i = 0; i < nItems; i++) arrItems[i] = menuItems[i];
 }
 
 Menu::~Menu ()
@@ -125,7 +124,7 @@ Menu::SelectItem (int nStudents) const
                                       << nStudents
                                       << "\n\n";
 
-            for (std::size_t i = 0; i < nItems; i++)
+            for (int i = 0; i < nItems; i++)
             {
                 /**
                  * print arrow if current printed line
@@ -174,7 +173,7 @@ Menu::SelectItem (int nStudents) const
                                   << nStudents
                                   << "\n\n";
 
-        for (std::size_t i = 0; i < nItems; i++) cout << arrItems[i] << "\n";
+        for (int i = 0; i < nItems; i++) cout << arrItems[i] << "\n";
 
         return std::stoi(GetValidString(STR_DIGITS).substr(0, 3));
     }
