@@ -1,6 +1,8 @@
 #include "../include/Student.hpp"
 
 #include <algorithm>
+#include <iomanip>
+#include <ios>
 
 
 Session::Session (std::size_t nSubj, Subject * arrSubjects)
@@ -37,3 +39,22 @@ Student::Student (const std::string & name,
     , nSessions{nSes}
     , sessions{ses}
 {}
+
+std::ostream &
+operator<< (std::ostream & os, const Student & stud)
+{
+    /**
+     * very big TODO:
+     * Cannot print Person's private attributes here.
+     * Possible solutions:
+     * 1. Implement IntroduceYourself() for both classes
+     * 2. Overload operator<< for Person to be able to print itself
+     */
+    os << std::left << std::setw(10) << stud.GetGradebook();
+    os << "|" << std::left << std::setw(30) << "SURNAME:"
+       << "|" << std::left << std::setw(30) << "NAME:"
+       << "|" << std::left << std::setw(30) << "PATR.:";
+
+    return os;
+}
+
